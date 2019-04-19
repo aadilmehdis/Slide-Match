@@ -38,12 +38,14 @@ class SlideMatcher :
             self.slidesNames.append(slideFile.split('/')[-1])
             imageData = cv2.imread(slideFile)
             imageData = cv2.resize(imageData, (1800, 1398))
+            imageData = cv2.cvtColor(imageData, cv2.COLOR_BGR2GRAY)
             self.slidesData.append(imageData)
 
         for frameFile in sorted(glob.glob(self.framesLocation+'/*.jpg')):
             self.framesNames.append(frameFile.split('/')[-1])
             imageData = cv2.imread(frameFile)
             imageData = cv2.resize(imageData, (1800, 1398))
+            imageData = cv2.cvtColor(imageData, cv2.COLOR_BGR2GRAY)
             self.framesData.append(imageData)
 
     def meanSquareError(self, image_a, image_b):
