@@ -12,20 +12,15 @@ if not os.path.exists("./full_test"):
 
 DEST_DIR = "./full_test/"
 
-
+test_count = 1
+ppt_count = 1
 for folder in sorted(os.walk('./Dataset')):
-    # print(folder[2])
-    # print(folder[1])
-    # print(folder[0])
-    # print()
-    # print()
-    # for file in folder[2]:
-    #     file_src = folder[0] + "/" + file
-    #     file_dest = DEST_DIR + "frames/" + 
-    #     pass
-
-    # for frame in file[2]:
-    #     if 'ppt' not in frame:
-    #         shutil.copyfile(file[0]+"/"+frame, DEST_DIR+'frames/'+file[0].split('/')[1]+"_"+frame)
-    #     else:
-    #         shutil.copyfile(file[0]+"/"+frame, DEST_DIR +"slides"+file[0].split('/')[1]+"_"+frame)
+    for file in folder[2]:
+        file_src = folder[0] + "/" + file
+        if 'ppt' in file:
+            file_dest = DEST_DIR + "frames/ppt" + str(ppt_count) + '.jpg'
+            ppt_count += 1
+        else:
+            file_dest = DEST_DIR + "frames/" + str(test_count) + '.jpg'
+            test_count += 1
+        shutil.copyfile(file_src, file_dest)
