@@ -90,11 +90,12 @@ class SlideMatcher :
 
                 if re.compile(r'\b({0})\b'.format(self.framesNames[ind]), flags=re.IGNORECASE).search(correct):
 
-                    if self.matchedSlides[-1].strip(' \n') != correct.split(' ')[2].strip(' \n'):
+                    if self.matchedSlides[-1].strip('   \n') != correct.split(' ')[1].strip('   \n'):
                         self.error_rate = self.error_rate + 1
+                        print(self.matchedSlides[-1].strip(' \n'))
+                        print(correct.split(' ')[1].strip(' \n'))
                         print("##################### WRONG #####################")
-                        print("Correct Directory: " + correct.split(' ')[0]+ " Predicted Directory: " + )
-                    print(str(ind) + ": " +self.framesNames[ind]+" Predicted: "+self.matchedSlides[-1]+" Correct: "+correct.split(' ')[2] +" Error rate: "+str((self.error_rate/(ind+1))*100))
+                    print(str(ind) + ": " +self.framesNames[ind]+" Predicted: "+self.matchedSlides[-1]+" Correct: "+correct.split(' ')[1] +" Error rate: "+str((self.error_rate/(ind+1))*100))
 
 
     def outputGiver(self) :
