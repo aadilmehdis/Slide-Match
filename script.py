@@ -3,7 +3,6 @@ import cv2
 import glob
 import os
 import re
-from matplotlib import pyplot as plt
 import numpy as np
 
 class SlideMatcher :
@@ -14,7 +13,7 @@ class SlideMatcher :
 
         self.slidesLocation = ''
         self.framesLocation = ''
-        self.outputFile = 'output.txt'
+        self.outputFile = '20171043_20171061_20171092.txt'
         self.slidesData = []
         self.framesData = []
         self.slidesNames = []
@@ -92,10 +91,8 @@ class SlideMatcher :
 
                     if self.matchedSlides[-1].strip(' \n') != correct.split(' ')[1].strip(' \n'):
                         self.error_rate = self.error_rate + 1
-                        print(self.matchedSlides[-1])
-                        print(correct)
-                        print("##################### WRONG #####################")
-                    print(str(ind) + ": " +self.framesNames[ind]+" Predicted: "+self.matchedSlides[-1]+" Correct: "+correct.split(' ')[1] +" Error rate: "+str((self.error_rate/(ind+1))*100))
+                        # print("##################### WRONG #####################")
+                    # print(str(ind) + ": " +self.framesNames[ind]+" Predicted: "+self.matchedSlides[-1]+" Correct: "+correct.split(' ')[1] +" Error rate: "+str((self.error_rate/(ind+1))*100))
 
 
     def outputGiver(self) :
@@ -103,7 +100,7 @@ class SlideMatcher :
 
         f = open(self.outputFile, "w")
         for i in range(len(self.framesNames)):
-            print(self.framesNames[i]+' '+self.matchedSlides[i]+'\n')
+            # print(self.framesNames[i]+' '+self.matchedSlides[i]+'\n')
             f.write(self.framesNames[i]+' '+self.matchedSlides[i]+'\n')
 
         f.close()
