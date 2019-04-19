@@ -38,14 +38,12 @@ class SlideMatcher :
             self.slidesNames.append(slideFile.split('/')[-1])
             imageData = cv2.imread(slideFile)
             imageData = cv2.resize(imageData, (1800, 1398))
-            imageData = cv2.cvtColor(imageData, cv2.COLOR_BGR2GRAY)
             self.slidesData.append(imageData)
 
         for frameFile in sorted(glob.glob(self.framesLocation+'/*.jpg')):
             self.framesNames.append(frameFile.split('/')[-1])
             imageData = cv2.imread(frameFile)
             imageData = cv2.resize(imageData, (1800, 1398))
-            imageData = cv2.cvtColor(imageData, cv2.COLOR_BGR2GRAY)
             self.framesData.append(imageData)
 
     def meanSquareError(self, image_a, image_b):
@@ -58,13 +56,20 @@ class SlideMatcher :
 
     def templateMatcher(self, frame, slide):
         """Calculates the template matching result for a template and an image"""
-        
-        frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) 
-        slide_gray = cv2.cvtColor(slide, cv2.COLOR_BGR2GRAY) 
+
+        frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        slide_gray = cv2.cvtColor(slide, cv2.COLOR_BGR2GRAY)
         w, h = frame_gray.shape[::-1]
-        res = cv2.matchTemplate(slide_gray,frame_gray,cv2.TM_CCOEFF_NORMED)
-        return max(max((res)))
-        #return cv2.matchTemplate(slide_gray,frame_gray,cv2.TM_CCOEFF_NORMED) 
+        w = int(w)
+        h = int(h)
+
+        res_1 = cv2.matchTemplate(slide_gray[0: int(h/2), 0: int(w/2)],frame_gray[0: int(h/2), 0: int(w/2)],cv2.TM_CCOEFF_NORMED)
+        res_2 = cv2.matchTemplate(slide_gray[0: int(h/2), int(w/2): w],frame_gray[0: int(h/2), int(w/2): w],cv2.TM_CCOEFF_NORMED)
+        res_3 = cv2.matchTemplate(slide_gray[int(h/2): h, 0: int(w/2)],frame_gray[int(h/2): h, 0: int(w/2)],cv2.TM_CCOEFF_NORMED)
+        res_4 = cv2.matchTemplate(slide_gray[int(h/2): h, int(w/2): w],frame_gray[int(h/2): h, int(w/2): w],cv2.TM_CCOEFF_NORMED)
+
+        return max(max((res_1))) + max(max((res_2))) + max(max((res_3))) + max(max((res_4)))
+        #return cv2.matchTemplate(slide_gray,frame_gray,cv2.TM_CCOEFF_NORMED)
 
     def matchImages(self):
         """Finds best matching slide with respect to each frame"""
@@ -87,7 +92,7 @@ class SlideMatcher :
 
                     if self.matchedSlides[-1].strip(' \n') != correct.split(' ')[1].strip(' \n'):
                         self.error_rate = self.error_rate + 1
-                    print(self.framesNames[ind]+" Predicted: "+self.matchedSlides[-1]+" Correct: "+correct.split(' ')[1] +" Error rate: "+str((self.error_rate/(ind+1))*100))
+                    print(str(ind) + ": " +self.framesNames[ind]+" Predicted: "+self.matchedSlides[-1]+" Correct: "+correct.split(' ')[1] +" Error rate: "+str((self.error_rate/(ind+1))*100))
 
 
     def outputGiver(self) :
