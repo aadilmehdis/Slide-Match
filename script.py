@@ -54,6 +54,16 @@ class SlideMatcher :
 
         return err
 
+    def templateMatcher(self, frame, slide):
+        """Calculates the template matching result for a template and an image"""
+        
+        frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) 
+        slide_gray = cv2.cvtColor(slide, cv2.COLOR_BGR2GRAY) 
+        w, h = frame_gray.shape[::-1]
+        res = cv2.matchTemplate(slide_gray,frame_gray,cv2.TM_CCOEFF_NORMED)
+        return max(max((res)))
+        #return cv2.matchTemplate(slide_gray,frame_gray,cv2.TM_CCOEFF_NORMED) 
+
     def matchImages(self):
         """Finds best matching slide with respect to each frame"""
 
@@ -61,7 +71,9 @@ class SlideMatcher :
             cur_err = self.MAX
             cur_index = -1
             for i, slide in enumerate(self.slidesData):
-                temp = self.meanSquareError(frame, slide)
+                #self.templateMatcher(frame, slide)
+                #temp = self.meanSquareError(frame, slide)
+                temp = -1 * self.templateMatcher(frame, slide)
                 if temp < cur_err:
                     cur_err = temp
                     cur_index = i
